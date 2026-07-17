@@ -1,5 +1,3 @@
-export const API_BASE_URL = "http://localhost:8080/api";
-
 export const QR_TYPES = [
   { value: "URL",     label: "URL",     hint: "Website link"      },
   { value: "TEXT",    label: "Text",    hint: "Plain text"        },

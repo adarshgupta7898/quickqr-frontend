@@ -5,7 +5,7 @@ import Button from '../components/common/Button';
 import Modal from '../components/common/Modal';
 import { PageLoader } from '../components/common/Loader';
 import { useQRHistory } from '../hooks/useQRHistory';
-import { deleteQRCode, downloadQRCode } from '../services/api';
+import { deleteQr, downloadQr } from '../services/api';
 import { buildDownloadFileName, formatDate } from '../utils';
 
 const History = () => {
@@ -19,7 +19,7 @@ const History = () => {
 
     setDeletingId(selectedItem.id);
     try {
-      await deleteQRCode(selectedItem.id);
+      await deleteQr(selectedItem.id);
       toast.success('QR code deleted.');
       await refetch();
     } catch (error) {
@@ -36,8 +36,17 @@ const History = () => {
 
     setDownloadingId(item.id);
     try {
-      const title = item.title || 'qr-code';
-      await downloadQRCode(item.id, buildDownloadFileName(title));
+      const url = downloadQr(item.id);
+      const filename = buildDownloadFileName(item.title || 'qr-code');
+      const link = Object.assign(document.createElement('a'), {
+        href: url,
+        download: filename,
+        target: '_blank',
+      });
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
       toast.success('QR image downloaded.');
     } catch (error) {
       const message = error?.response?.data?.message || 'Unable to download the QR image.';

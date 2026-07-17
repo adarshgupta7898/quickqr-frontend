@@ -5,7 +5,7 @@ import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import { PageLoader } from '../components/common/Loader';
-import { generateQRCode, downloadQRCode } from '../services/api';
+import { generateQr, downloadQr } from '../services/api';
 import { QR_TYPES } from '../constants';
 import { buildDownloadFileName, copyToClipboard, formatDate } from '../utils';
 
@@ -43,7 +43,7 @@ const GenerateQR = () => {
         content: form.content.trim(),
       };
 
-      const response = await generateQRCode(payload);
+      const response = await generateQr(payload);
       setGeneratedQR(response);
       setForm({ title: '', type: 'URL', content: '' });
       setFieldErrors({ content: '' });
@@ -70,8 +70,17 @@ const GenerateQR = () => {
     if (!generatedQR?.id) return;
     setDownloading(true);
     try {
-      const title = generatedQR.title || 'qr-code';
-      await downloadQRCode(generatedQR.id, buildDownloadFileName(title));
+      const url = downloadQr(generatedQR.id);
+      const filename = buildDownloadFileName(generatedQR.title || 'qr-code');
+      const link = Object.assign(document.createElement('a'), {
+        href: url,
+        download: filename,
+        target: '_blank',
+      });
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
       toast.success('QR image downloaded.');
     } catch (error) {
       const message = error?.response?.data?.message || 'Unable to download the QR image.';

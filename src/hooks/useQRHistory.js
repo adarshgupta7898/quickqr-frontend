@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getHistory } from '../services/api';
+import { getQrHistory } from '../services/api';
 
 export function useQRHistory() {
   const [history, setHistory] = useState([]);
@@ -10,7 +10,7 @@ export function useQRHistory() {
     setLoading(true);
     setError(null);
     try {
-      const result = await getHistory();
+      const result = await getQrHistory();
       setHistory(result);
     } catch (err) {
       setError(err);
