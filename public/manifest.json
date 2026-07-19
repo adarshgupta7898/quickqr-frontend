@@ -1,0 +1,16 @@
+{
+  "name": "QuickQR",
+  "short_name": "QuickQR",
+  "description": "Free URL QR code generator with fast download and a clean mobile-friendly experience.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "48x46",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -2,12 +2,13 @@ import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdQrCode2, MdMenu, MdClose } from "react-icons/md";
-import { HiHome, HiSparkles, HiClock } from "react-icons/hi2";
+import { HiHome, HiSparkles } from "react-icons/hi2";
 
 const NAV_LINKS = [
   { to: "/",         label: "Home",     Icon: HiHome     },
   { to: "/generate", label: "Generate", Icon: HiSparkles },
-  { to: "/history",  label: "History",  Icon: HiClock    },
+  { to: "/about",    label: "About",    Icon: HiSparkles },
+  { to: "/contact",  label: "Contact",  Icon: HiSparkles },
 ];
 
 export default function Navbar() {

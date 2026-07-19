@@ -3,18 +3,32 @@ import { toast } from 'react-hot-toast';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
-import Select from '../components/common/Select';
+import Seo from '../components/common/Seo';
 import { PageLoader } from '../components/common/Loader';
 import { generateQr, downloadQr } from '../services/api';
-import { QR_TYPES } from '../constants';
 import { buildDownloadFileName, copyToClipboard, formatDate } from '../utils';
 
 const GenerateQR = () => {
-  const [form, setForm] = useState({ title: '', type: 'URL', content: '' });
+  const [form, setForm] = useState({ title: '', content: '' });
   const [fieldErrors, setFieldErrors] = useState({ content: '' });
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [generatedQR, setGeneratedQR] = useState(null);
+
+  const seoData = {
+    title: 'Generate URL QR Codes | QuickQR',
+    description: 'Enter any URL and generate a high-quality QR code instantly with QuickQR. Download or copy your URL QR code in seconds.',
+    pathname: '/generate',
+    structuredData: [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://quickqr-frontend-flame.vercel.app/' },
+          { '@type': 'ListItem', position: 2, name: 'Generate', item: 'https://quickqr-frontend-flame.vercel.app/generate' },
+        ],
+      },
+    ],
+  }
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -39,13 +53,12 @@ const GenerateQR = () => {
     try {
       const payload = {
         title: form.title.trim() || undefined,
-        type: form.type,
         content: form.content.trim(),
       };
 
       const response = await generateQr(payload);
       setGeneratedQR(response);
-      setForm({ title: '', type: 'URL', content: '' });
+      setForm({ title: '', content: '' });
       setFieldErrors({ content: '' });
       toast.success('QR code generated successfully.');
     } catch (error) {
@@ -92,25 +105,19 @@ const GenerateQR = () => {
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6">
-      <Card title="Generate QR code" description="Create a QR code using a title, type, and content.">
+      <Seo {...seoData} />
+      <Card title="Generate QR code" description="Create a QR code using a title and URL.">
         <form className="grid gap-5 md:grid-cols-2" onSubmit={handleSubmit}>
           <Input label="Title" name="title" value={form.title} onChange={handleChange} placeholder="My Website" />
-          <Select label="Type" name="type" value={form.type} onChange={handleChange}>
-            {QR_TYPES.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </Select>
           <div className="md:col-span-2">
-            <Input label="Content" name="content" value={form.content} onChange={handleChange} placeholder="https://example.com" error={fieldErrors.content} />
+            <Input label="Website URL" name="content" value={form.content} onChange={handleChange} placeholder="https://example.com" error={fieldErrors.content} />
           </div>
           <div className="md:col-span-2 flex flex-wrap gap-3">
             <Button type="submit" loading={loading}>
               {loading ? 'Generating...' : 'Generate'}
             </Button>
             <Button variant="secondary" type="button" onClick={() => {
-              setForm({ title: '', type: 'URL', content: '' });
+              setForm({ title: '', content: '' });
               setFieldErrors({ content: '' });
             }}>
               Reset
@@ -133,7 +140,7 @@ const GenerateQR = () => {
               <div className="space-y-2">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">Preview</p>
                 <h3 className="text-2xl font-bold text-slate-900">{generatedQR.title || 'Untitled QR'}</h3>
-                <p className="text-sm text-slate-600">Type: {generatedQR.type}</p>
+                <p className="text-sm text-slate-600">Type: URL</p>
                 <p className="text-sm text-slate-600">Created: {formatDate(generatedQR.createdAt)}</p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">

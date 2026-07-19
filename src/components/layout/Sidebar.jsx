@@ -1,11 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { HiHome, HiSparkles, HiClock } from "react-icons/hi2";
+import { HiHome, HiSparkles } from "react-icons/hi2";
 import { MdQrCode2 } from "react-icons/md";
 
 const links = [
   { to: "/",         label: "Home",     Icon: HiHome     },
   { to: "/generate", label: "Generate", Icon: HiSparkles },
-  { to: "/history",  label: "History",  Icon: HiClock    },
 ];
 
 /**
